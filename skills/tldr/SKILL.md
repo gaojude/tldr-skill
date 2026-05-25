@@ -1,11 +1,11 @@
 ---
 name: tldr
-description: Re-render the preceding information as a visual/structural "TL;DR" instead of prose. Use when the user invokes `/tldr` or asks for a "tldr", "tl;dr", "high-bandwidth", "visual", "dense", or "viz-first" reply. Routes around the ~50 bits/sec language bottleneck by using ASCII diagrams, bar charts, tables, decision trees, and spatial layout — leveraging the visual cortex's ~10M bits/sec input channel. Apply to the *immediately preceding* answer or content under discussion, re-rendering it in visual form. Triggers include "/tldr", "tldr this", "make this visual", "viz this", "highest-bandwidth way", "render this dense".
+description: Re-render the immediately preceding answer as a visual/structural "TL;DR" instead of prose. Use when the user invokes `/tldr` or asks for a "tldr", "tl;dr", "high-bandwidth", "visual", "dense", or "viz-first" reply. Routes around the ~10–50 bits/sec language channel by using ASCII diagrams, bar charts, tables, decision trees, and spatial layout — leveraging the visual cortex's much higher raw input bandwidth (~10^7 bits/sec). Apply to the immediately preceding answer or content under discussion, re-rendering it in visual form. Triggers include "/tldr", "tldr this", "make this visual", "viz this", "highest-bandwidth way", "render this dense".
 ---
 
 # tldr
 
-Re-render information using visual/structural layout instead of prose. Based on the cognitive research that conscious processing caps at ~10–50 bits/sec for language but the visual system feeds ~10M bits/sec — so spatial layout, diagrams, and structural compression beat paragraphs for the same idea.
+Re-render information using visual/structural layout instead of prose. Based on the cognitive research that conscious processing of language caps at ~10–50 bits/sec (Zheng & Meister, *Neuron* 2024) while the retina transmits ~10^7 bits/sec to the visual cortex (Koch et al. 2006) — so spatial layout, diagrams, and structural compression beat paragraphs for the same idea.
 
 ## Core principle
 
@@ -48,8 +48,8 @@ Re-render information using visual/structural layout instead of prose. Based on 
    - hierarchies/decisions → trees
    - code → fenced code block (already visual)
 4. **Use spatial alignment to encode meaning.** Same column = same dimension. Same indent = same level. Adjacency = relatedness. Don't waste pixels.
-5. **One callout, at the end.** A single bold line that fuses the insight. Not a "summary" section. Not bullet points restating what's above.
-6. **Match the user's language.** If they wrote in Chinese, respond in Chinese (but the visuals are language-neutral, so they cost almost nothing to translate).
+5. **One callout, at the end.** A single line that fuses the insight. Not a "summary" section. Not bullet points restating what's above.
+6. **Match the user's language for labels and prose.** If they wrote in Chinese, write labels in Chinese; if English, English. The *structural primitives* (bars, boxes, arrows) are language-neutral and translate cheaply — but the words inside them are not.
 
 ## Anti-patterns (do not do these)
 
@@ -67,7 +67,7 @@ Re-render information using visual/structural layout instead of prose. Based on 
 
 When invoked:
 
-1. **Identify the source content.** Usually the user means "the previous answer" or "the info we were just discussing." If ambiguous, ask in one line.
+1. **Identify the source content.** Usually the immediately preceding answer or the content the user is referring to. If ambiguous, ask in one line.
 2. **Extract the 3–6 load-bearing facts.** Everything else is filler.
 3. **Pick a primitive per fact** using the matching table above.
 4. **Stack them top-to-bottom in order of importance** — heaviest insight first, supporting detail below.
@@ -75,21 +75,22 @@ When invoked:
 
 ## Example transformation
 
-**Before** (~120 words, ~50 bits/sec channel):
+**Before** (~120 words, language-channel rate):
 
 > Reading and listening hit roughly the same bottleneck because the conscious mind only processes about 10 to 50 bits per second. Reading averages around 240 to 260 words per minute and listening peaks around 275 words per minute when sped up. The visual system can take in millions of bits per second of raw input, which is why diagrams and visualizations can communicate so much more efficiently than the same information rendered as prose. So the real lever is not switching from text to audio but matching the modality to the content type.
 
-**After** (~3 sec to grasp):
+**After** (~3 seconds to grasp):
 
 ```
-   带宽对比
-   ════════
-   视觉原始输入   ████████████████████████   10M bits/s
-   阅读           ▌                          50 bits/s
-   听力           ▌                          39 bits/s
-                                             ↑ 同一个天花板
+   Bandwidth comparison
+   ════════════════════
+   Visual raw input    ████████████████████████   ~10M bits/s
+   Reading             ▌                          ~50 bits/s
+   Listening           ▌                          ~39 bits/s
+                                                  ↑ same language ceiling
 
-   → 改通道（文字→语音）几乎没用；改模态（语言→视觉）才有用
+   → Switching channels (text → speech) barely helps.
+     Switching modality (language → visual) does.
 ```
 
 ## Notes on rendering
@@ -98,5 +99,5 @@ When invoked:
 - Bars: `█ ▓ ▒ ░ ▌ ▎ ▏` (full → empty)
 - Arrows: `→ ← ↑ ↓ ↔ ↕ ↗ ↘ ─→ ══>`
 - Bullets when unavoidable: `● ○ ◆ ◇ ★`
-- Keep line width ≤ ~70 chars so it renders cleanly in terminal + Obsidian + web chat.
+- Keep visible line width ≤ ~70 chars so it renders cleanly in terminal + Obsidian + web chat. (YAML frontmatter strings can exceed this; only the rendered body counts.)
 - Markdown tables render in all three contexts; ASCII tables render everywhere but are bulkier — prefer markdown tables unless alignment matters.
